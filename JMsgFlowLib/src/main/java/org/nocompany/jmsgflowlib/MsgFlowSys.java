@@ -20,7 +20,7 @@ public class MsgFlowSys
 		_tBrokerSys = _tActorSys.actorOf(Props.create(BrokerSys.class), "BrokerSys");
 	}
 
-	public void InsertAct(IMsgFlowAct tMsgFlowAct)
+	public void InsertAct(AMsgFlowAct tMsgFlowAct)
 	{
 		ActorRef tActor = _tActorSys.actorOf(Props.create(MsgFlowActImpl.class));
 		Inbox tInbox = Inbox.create(_tActorSys);

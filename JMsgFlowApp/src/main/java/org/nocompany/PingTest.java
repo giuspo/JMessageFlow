@@ -1,20 +1,13 @@
 package org.nocompany;
 
 import org.nocompany.jmsgflowlib.EventMsg;
-import org.nocompany.jmsgflowlib.IMsgFlowAct;
+import org.nocompany.jmsgflowlib.AMsgFlowAct;
 
 /**
  * Created by giulio on 08/05/15.
  */
-public class PingTest implements IMsgFlowAct
+public class PingTest extends AMsgFlowAct
 {
-	int _iValue;
-
-	public PingTest(int ival)
-	{
-		_iValue = ival;
-	}
-
 	@Override
 	public void Init()
 	{

@@ -94,13 +94,6 @@ public class BrokerSys extends UntypedActor
 				for(List<ActorRef> rgtActor : _rgtEventSubscriberMap.values())
 				{
 					rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg.getData(), getContext()));
-
-					/*
-					;tActorRef =>
-							{
-									tActorRef.Tell(tEventMsg.Data);
-					});
-					*/
 				}
 			}
 		}

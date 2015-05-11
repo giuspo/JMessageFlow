@@ -1,6 +1,5 @@
 package org.nocompany.jmsgflowlib;
 
-import akka.actor.UnhandledMessage;
 import akka.actor.UntypedActor;
 
 /**
@@ -25,9 +24,9 @@ public class MsgFlowActImpl extends UntypedActor
 		}
 		else if(_bInitOk)
 		{
-			if (objMsg instanceof EventMsg)
+			if(objMsg instanceof EventMsg)
 			{
-				EventMsg tEventMsg = (EventMsg) objMsg;
+				EventMsg tEventMsg = (EventMsg)objMsg;
 
 				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg);
 			}

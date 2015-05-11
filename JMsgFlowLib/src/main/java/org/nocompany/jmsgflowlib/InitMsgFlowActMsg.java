@@ -7,7 +7,7 @@ import akka.actor.ActorRef;
  */
 public class InitMsgFlowActMsg
 {
-	private final IMsgFlowAct _tMsgFlowAct;
+	private final AMsgFlowAct _tMsgFlowAct;
 	private final ActorRef _tBrokerSys;
 
 	public ActorRef getBrokerSys()
@@ -15,12 +15,12 @@ public class InitMsgFlowActMsg
 		return _tBrokerSys;
 	}
 
-	public IMsgFlowAct getMsgFlowAct()
+	public AMsgFlowAct getMsgFlowAct()
 	{
 		return _tMsgFlowAct;
 	}
 
-	public InitMsgFlowActMsg(IMsgFlowAct tMsgFlowAct, ActorRef tBroker)
+	public InitMsgFlowActMsg(AMsgFlowAct tMsgFlowAct, ActorRef tBroker)
 	{
 		_tMsgFlowAct = tMsgFlowAct;
 		_tBrokerSys = tBroker;
