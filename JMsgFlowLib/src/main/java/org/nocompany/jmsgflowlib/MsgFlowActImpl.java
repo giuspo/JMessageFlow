@@ -9,6 +9,7 @@ import akka.actor.UntypedActor;
 public class MsgFlowActImpl extends UntypedActor
 {
 	private IMsgFlowAct _tMsgFLowAct;
+	private boolean _bInitOk = false;
 
 	@Override
 	public void onReceive(Object objMsg) throws Exception
@@ -20,12 +21,16 @@ public class MsgFlowActImpl extends UntypedActor
 			_tMsgFLowAct = tInitMsg.getMsgFlowAct();
 
 			_tMsgFLowAct.Init();
+			_bInitOk = true;
 		}
-		else if(objMsg instanceof EventMsg)
+		else if(_bInitOk)
 		{
-			EventMsg tEventMsg = (EventMsg)objMsg;
+			if (objMsg instanceof EventMsg)
+			{
+				EventMsg tEventMsg = (EventMsg) objMsg;
 
-			_tMsgFLowAct.OnMsgFlowReceive(tEventMsg);
+				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg);
+			}
 		}
 		else
 		{

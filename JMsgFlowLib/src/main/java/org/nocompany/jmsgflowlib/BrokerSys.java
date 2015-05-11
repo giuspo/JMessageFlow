@@ -1,12 +1,15 @@
 package org.nocompany.jmsgflowlib;
 
 import akka.actor.ActorRef;
+import akka.actor.DeadLetter;
 import akka.actor.UntypedActor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Created by giulio on 10/05/15.
@@ -21,9 +24,9 @@ public class BrokerSys extends UntypedActor
 		if(objMsg instanceof SubscriberMsg)
 		{
 			SubscriberMsg tSubMsg = (SubscriberMsg)objMsg;
-			boolean bIskeyFind = _rgtEventSubscriberMap.containsKey(tSubMsg.getEventName());
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tSubMsg.getEventName());
 
-			if(!bIskeyFind)
+			if(!bIsKeyFind)
 			{
 				// SG: Event doesn't exist
 				ArrayList<ActorRef> rgtActorList = new ArrayList<ActorRef>();
@@ -53,9 +56,9 @@ public class BrokerSys extends UntypedActor
 		else if(objMsg instanceof UnSubscribeMsg)
 		{
 			UnSubscribeMsg tUnSubMsg = (UnSubscribeMsg)objMsg;
-			boolean bIskeyFind = _rgtEventSubscriberMap.containsKey(tUnSubMsg.getEventName());
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tUnSubMsg.getEventName());
 
-			if(bIskeyFind)
+			if(bIsKeyFind)
 			{
 				// SG: Event already exists
 				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(tUnSubMsg.getEventName());
@@ -72,5 +75,35 @@ public class BrokerSys extends UntypedActor
 				}
 			}
 		}
+		else if(objMsg instanceof DeadLetter)
+		{
+			DeadLetter tDeadMsg = (DeadLetter)objMsg;
+
+			for(List<ActorRef> rgtActor : _rgtEventSubscriberMap.values())
+			{
+				rgtActor.removeIf(Predicate.isEqual(tDeadMsg.sender()));
+			}
+		}
+		else if(objMsg instanceof EventMsg)
+		{
+			EventMsg tEventMsg = (EventMsg)objMsg;
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tEventMsg.getEvent());
+
+			if(!bIsKeyFind)
+			{
+				for(List<ActorRef> rgtActor : _rgtEventSubscriberMap.values())
+				{
+					rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg.getData(), getContext()));
+
+					/*
+					;tActorRef =>
+							{
+									tActorRef.Tell(tEventMsg.Data);
+					});
+					*/
+				}
+			}
+		}
+
 	}
 }

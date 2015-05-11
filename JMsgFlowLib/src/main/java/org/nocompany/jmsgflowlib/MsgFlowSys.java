@@ -2,6 +2,7 @@ package org.nocompany.jmsgflowlib;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Inbox;
 import akka.actor.Props;
 import scala.util.parsing.combinator.testing.Str;
 
@@ -22,7 +23,9 @@ public class MsgFlowSys
 	public void InsertAct(IMsgFlowAct tMsgFlowAct)
 	{
 		ActorRef tActor = _tActorSys.actorOf(Props.create(MsgFlowActImpl.class));
+		Inbox tInbox = Inbox.create(_tActorSys);
 
-		tActor.tell();
+		tInbox.send(tActor, new InitMsgFlowActMsg(tMsgFlowAct,
+				_tBrokerSys));
 	}
 }
