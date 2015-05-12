@@ -1,5 +1,7 @@
 package org.nocompany.jmsgflowlib;
 
+import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.actor.UntypedActor;
 
 /**
@@ -7,10 +9,20 @@ import akka.actor.UntypedActor;
  */
 public abstract class AMsgFlowAct
 {
-	public abstract void Init();
+	private ActorRef _tBrokerSys;
+
+	private ActorRef _tActor;
+
+	public abstract void InitMsgFlow();
 
 	public abstract void OnMsgFlowReceive(EventMsg tEventMsg);
 
+	public void Init()
+	{
+
+	}
+
+	/*
 	public UntypedActor Create()
 	{
 		return new UntypedActor()
@@ -39,4 +51,5 @@ public abstract class AMsgFlowAct
 			}
 		};
 	}
+	*/
 }
