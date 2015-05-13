@@ -4,7 +4,6 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Inbox;
 import akka.actor.Props;
-import scala.util.parsing.combinator.testing.Str;
 
 /**
  * Created by giulio on 10/05/15.
@@ -20,12 +19,15 @@ public class MsgFlowSys
 		_tBrokerSys = _tActorSys.actorOf(Props.create(BrokerSys.class), "BrokerSys");
 	}
 
-	public void CreateMsgFlow(AMsgFlowAct tMsgFlowAct)
+	public void LinkMsgFlowAct(AMsgFlowAct tMsgFlowAct)
 	{
-//		ActorRef tActor = _tActorSys.actorOf();
-//		Inbox tInbox = Inbox.create(_tActorSys);
-//
-//		tInbox.send(tActor, new InitActMsg(tMsgFlowAct,
-//				_tBrokerSys));
+		ActorRef tActor = _tActorSys.actorOf(Props.create(MsgFlowActImpl.class));
+
+		tMsgFlowAct.setActorImpl(tActor);
+		tMsgFlowAct.setBroker(_tBrokerSys);
+		tMsgFlowAct.setActorSys(_tActorSys);
+
+		Inbox tInbox = Inbox.create(_tActorSys);
+		tInbox.send(tActor, new InitActMsg(tMsgFlowAct, _tBrokerSys));
 	}
 }

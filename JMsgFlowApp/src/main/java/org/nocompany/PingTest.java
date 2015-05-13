@@ -9,14 +9,25 @@ import org.nocompany.jmsgflowlib.AMsgFlowAct;
 public class PingTest extends AMsgFlowAct
 {
 	@Override
-	public void Init()
+	public void InitMsgFlow()
 	{
+		Subscribe("Pong");
+	}
 
+	@Override
+	public void OnTick()
+	{
+		super.OnTick();
+
+		Publish("Ping", null);
 	}
 
 	@Override
 	public void OnMsgFlowReceive(EventMsg tEventMsg)
 	{
-
+		if(tEventMsg.getEvent().equals("Pong"))
+		{
+			getLog().info("Pong received!");
+		}
 	}
 }

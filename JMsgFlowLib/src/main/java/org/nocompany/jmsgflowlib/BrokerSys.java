@@ -31,7 +31,7 @@ public class BrokerSys extends UntypedActor
 				// SG: Event doesn't exist
 				ArrayList<ActorRef> rgtActorList = new ArrayList<ActorRef>();
 
-				// SG: Create new Actor Subscriber List for this Event
+				// SG: Create new Actor Subscribe List for this Event
 				rgtActorList.add(getSender());
 				// SG: Add new Event and Actor to Dictionary
 				_rgtEventSubscriberMap.put(tSubMsg.getEventName(), rgtActorList);
@@ -46,7 +46,7 @@ public class BrokerSys extends UntypedActor
 
 				if(!bIsActorFind)
 				{
-					// SG: Actor doesn't exist into Subscriber List
+					// SG: Actor doesn't exist into Subscribe List
 					rgtActorList.add(getSender());
 					// SG: Watch this Actor
 					getContext().watch(getSender());
@@ -89,11 +89,11 @@ public class BrokerSys extends UntypedActor
 			EventMsg tEventMsg = (EventMsg)objMsg;
 			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tEventMsg.getEvent());
 
-			if(!bIsKeyFind)
+			if(bIsKeyFind)
 			{
 				for(List<ActorRef> rgtActor : _rgtEventSubscriberMap.values())
 				{
-					rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg.getData(), getContext()));
+					rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg, getContext()));
 				}
 			}
 		}

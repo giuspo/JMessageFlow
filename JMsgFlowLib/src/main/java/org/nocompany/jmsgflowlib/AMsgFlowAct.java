@@ -1,8 +1,9 @@
 package org.nocompany.jmsgflowlib;
 
-import akka.actor.ActorRef;
-import akka.actor.Props;
-import akka.actor.UntypedActor;
+import akka.actor.*;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import scala.concurrent.duration.Duration;
 
 /**
  * Created by giulio on 08/05/15.
@@ -13,43 +14,59 @@ public abstract class AMsgFlowAct
 
 	private ActorRef _tActor;
 
-	public abstract void InitMsgFlow();
+	private ActorSystem _tActorSys;
 
-	public abstract void OnMsgFlowReceive(EventMsg tEventMsg);
+	private LoggingAdapter _tLog;
 
-	public void Init()
+	public final void setActorImpl(ActorRef tActor)
+	{
+		_tActor = tActor;
+	}
+
+	public final void setBroker(ActorRef tBroker)
+	{
+		_tBrokerSys = tBroker;
+	}
+
+	public final void setActorSys(ActorSystem tActorSys)
+	{
+		_tActorSys = tActorSys;
+		_tLog = Logging.getLogger(_tActorSys, this);
+	}
+
+	protected final LoggingAdapter getLog()
+	{
+		return _tLog;
+	}
+
+	protected final void Publish(String strEvn, Object objData)
+	{
+		Object objDataTmp[] = { objData };
+		_tBrokerSys.tell(new EventMsg(strEvn, objDataTmp), _tActor);
+	}
+
+	protected final void Subscribe(String strEvn)
+	{
+		_tBrokerSys.tell(new SubscriberMsg(strEvn), _tActor);
+	}
+
+	protected final void UnSubscribe(String strEvn)
+	{
+		_tBrokerSys.tell((new UnSubscribeMsg(strEvn)), _tActor);
+	}
+
+	protected final void SetTick(Duration tDuration)
+	{
+		Inbox tInbox = Inbox.create(_tActorSys);
+		tInbox.send(_tActor, new SetTickMsg(tDuration));
+	}
+
+	public void OnTick()
 	{
 
 	}
 
-	/*
-	public UntypedActor Create()
-	{
-		return new UntypedActor()
-		{
-			@Override
-			public void preStart() throws Exception
-			{
-				super.preStart();
+	protected abstract void InitMsgFlow();
 
-				Init();
-			}
-
-			@Override
-			public void onReceive(Object objMsg) throws Exception
-			{
-				if(objMsg instanceof EventMsg)
-				{
-					EventMsg tEventMsg = (EventMsg)objMsg;
-
-					OnMsgFlowReceive(tEventMsg);
-				}
-				else
-				{
-					unhandled(objMsg);
-				}
-			}
-		};
-	}
-	*/
+	protected abstract void OnMsgFlowReceive(EventMsg tEventMsg);
 }
