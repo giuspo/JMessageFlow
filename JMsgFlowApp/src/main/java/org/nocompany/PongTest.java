@@ -15,13 +15,14 @@ public class PongTest extends AMsgFlowAct
 	}
 
 	@Override
-	public void OnMsgFlowReceive(EventMsg tEventMsg)
+	public void OnMsgFlowReceive(String strEvn, Object objData)
 	{
-		if(tEventMsg.getEvent().equals("Ping"))
+		if(strEvn.equals("Ping"))
 		{
-			getLog().info("Ping received!");
+			int iVal = ((PingMsg)objData).getCount();
 
-			Publish("Pong", null);
+			getLog().info("Received Ping {}", iVal);
+			Publish("Pong", new PongMsg(iVal));
 		}
 	}
 }

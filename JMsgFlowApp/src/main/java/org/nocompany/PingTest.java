@@ -8,6 +8,8 @@ import org.nocompany.jmsgflowlib.AMsgFlowAct;
  */
 public class PingTest extends AMsgFlowAct
 {
+	private int _iVal = 0;
+
 	@Override
 	public void InitMsgFlow()
 	{
@@ -19,15 +21,17 @@ public class PingTest extends AMsgFlowAct
 	{
 		super.OnTick();
 
-		Publish("Ping", null);
+		getLog().info("Send Ping {}", _iVal);
+		Publish("Ping", new PingMsg(_iVal));
+		++_iVal;
 	}
 
 	@Override
-	public void OnMsgFlowReceive(EventMsg tEventMsg)
+	protected void OnMsgFlowReceive(String strEvn, Object objData)
 	{
-		if(tEventMsg.getEvent().equals("Pong"))
+		if(strEvn.equals("Pong"))
 		{
-			getLog().info("Pong received!");
+			getLog().info("Received Pong {}", ((PongMsg)objData).getCount());
 		}
 	}
 }

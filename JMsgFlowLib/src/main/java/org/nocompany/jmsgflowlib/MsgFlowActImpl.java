@@ -60,7 +60,8 @@ public class MsgFlowActImpl extends UntypedActor
 			{
 				EventMsg tEventMsg = (EventMsg)objMsg;
 
-				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg);
+				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg.getEvent(),
+					((Object[])(tEventMsg.getData()))[0]);
 			}
 			else if(objMsg instanceof String)
 			{

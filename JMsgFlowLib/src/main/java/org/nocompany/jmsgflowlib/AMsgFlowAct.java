@@ -10,11 +10,9 @@ import scala.concurrent.duration.Duration;
  */
 public abstract class AMsgFlowAct
 {
-	private ActorRef _tBrokerSys;
-
 	private ActorRef _tActor;
 
-	private ActorSystem _tActorSys;
+	private IMsgFlowSys _tMsgFlowSys;
 
 	private LoggingAdapter _tLog;
 
@@ -23,15 +21,10 @@ public abstract class AMsgFlowAct
 		_tActor = tActor;
 	}
 
-	public final void setBroker(ActorRef tBroker)
+	public final void setMsgFlowSys(IMsgFlowSys tMsgFlowSys)
 	{
-		_tBrokerSys = tBroker;
-	}
-
-	public final void setActorSys(ActorSystem tActorSys)
-	{
-		_tActorSys = tActorSys;
-		_tLog = Logging.getLogger(_tActorSys, this);
+		_tMsgFlowSys = tMsgFlowSys;
+		_tLog = Logging.getLogger(_tMsgFlowSys.getActorSystem(), this);
 	}
 
 	protected final LoggingAdapter getLog()
@@ -41,24 +34,22 @@ public abstract class AMsgFlowAct
 
 	protected final void Publish(String strEvn, Object objData)
 	{
-		Object objDataTmp[] = { objData };
-		_tBrokerSys.tell(new EventMsg(strEvn, objDataTmp), _tActor);
+		_tMsgFlowSys.Publish(_tActor, strEvn, objData);
 	}
 
 	protected final void Subscribe(String strEvn)
 	{
-		_tBrokerSys.tell(new SubscriberMsg(strEvn), _tActor);
+		_tMsgFlowSys.getBrokerSys().tell(new SubscriberMsg(strEvn), _tActor);
 	}
 
 	protected final void UnSubscribe(String strEvn)
 	{
-		_tBrokerSys.tell((new UnSubscribeMsg(strEvn)), _tActor);
+		_tMsgFlowSys.getBrokerSys().tell((new UnSubscribeMsg(strEvn)), _tActor);
 	}
 
 	protected final void SetTick(Duration tDuration)
 	{
-		Inbox tInbox = Inbox.create(_tActorSys);
-		tInbox.send(_tActor, new SetTickMsg(tDuration));
+		_tActor.tell(new SetTickMsg(tDuration), _tActor);
 	}
 
 	public void OnTick()
@@ -68,5 +59,5 @@ public abstract class AMsgFlowAct
 
 	protected abstract void InitMsgFlow();
 
-	protected abstract void OnMsgFlowReceive(EventMsg tEventMsg);
+	protected abstract void OnMsgFlowReceive(String strEvn, Object objData);
 }
