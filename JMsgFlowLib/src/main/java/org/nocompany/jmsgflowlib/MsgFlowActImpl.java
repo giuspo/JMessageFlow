@@ -3,7 +3,6 @@ package org.nocompany.jmsgflowlib;
 import akka.actor.Cancellable;
 import akka.actor.UntypedActor;
 import scala.concurrent.duration.Duration;
-
 import java.util.concurrent.TimeUnit;
 
 /**

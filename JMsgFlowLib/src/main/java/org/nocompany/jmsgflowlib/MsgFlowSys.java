@@ -8,7 +8,7 @@ import akka.actor.Props;
 /**
  * Created by giulio on 10/05/15.
  */
-public final class MsgFlowSys implements IMsgFlowSys
+public final class MsgFlowSys extends AMsgFlowSys
 {
 	private final ActorSystem _tActorSys;
 	private final ActorRef _tBrokerSys;

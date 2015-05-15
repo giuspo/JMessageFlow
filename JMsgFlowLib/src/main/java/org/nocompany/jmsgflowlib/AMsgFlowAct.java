@@ -12,7 +12,7 @@ public abstract class AMsgFlowAct
 {
 	private ActorRef _tActor;
 
-	private IMsgFlowSys _tMsgFlowSys;
+	private AMsgFlowSys _tMsgFlowSys;
 
 	private LoggingAdapter _tLog;
 
@@ -21,7 +21,7 @@ public abstract class AMsgFlowAct
 		_tActor = tActor;
 	}
 
-	public final void setMsgFlowSys(IMsgFlowSys tMsgFlowSys)
+	public final void setMsgFlowSys(AMsgFlowSys tMsgFlowSys)
 	{
 		_tMsgFlowSys = tMsgFlowSys;
 		_tLog = Logging.getLogger(_tMsgFlowSys.getActorSystem(), this);

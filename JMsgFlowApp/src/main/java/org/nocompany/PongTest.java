@@ -1,7 +1,6 @@
 package org.nocompany;
 
 import org.nocompany.jmsgflowlib.AMsgFlowAct;
-import org.nocompany.jmsgflowlib.EventMsg;
 
 /**
  * Created by giulio on 11/05/15.
