@@ -38,9 +38,9 @@ public class MsgFlowActImpl extends UntypedActor
 	public void onReceive(Object objMsg) throws
 		Exception
 	{
-		if(objMsg instanceof InitActMsg)
+		if(objMsg instanceof InitMsgFlowActMsg)
 		{
-			InitActMsg tInitMsg = (InitActMsg)objMsg;
+			InitMsgFlowActMsg tInitMsg = (InitMsgFlowActMsg)objMsg;
 
 			_tMsgFLowAct = tInitMsg.getMsgFlowAct();
 			_tMsgFLowAct.InitMsgFlow();

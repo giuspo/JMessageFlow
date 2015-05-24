@@ -4,6 +4,9 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Inbox;
 import akka.actor.Props;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
+import scala.concurrent.Future;
 
 /**
  * Created by giulio on 10/05/15.
@@ -47,6 +50,18 @@ public final class MsgFlowSys extends AMsgFlowSys
 		_tBrokerSys.tell(new EventMsg(strEvn, objDataTmp), tActor);
 	}
 
+	public Future<Object> Subscribe(String strEvn)
+	{
+		FutureAct tFutureAct = new FutureAct(this);
+		ActorRef tActor = _tActorSys.actorOf(Props.create(FutureActImpl.class));
+
+		Patterns.ask(tActor, new InitFutureActMsg(tFutureAct, strEvn), Timeout.
+
+
+		Inbox tInbox = Inbox.create(_tActorSys);
+
+		tInbox.send(tActor,);
+	}
 
 	public void LinkMsgFlowAct(AMsgFlowAct tMsgFlowAct)
 	{
@@ -57,6 +72,6 @@ public final class MsgFlowSys extends AMsgFlowSys
 
 		Inbox tInbox = Inbox.create(_tActorSys);
 
-		tInbox.send(tActor, new InitActMsg(tMsgFlowAct, _tBrokerSys));
+		tInbox.send(tActor, new InitMsgFlowActMsg(tMsgFlowAct));
 	}
 }
