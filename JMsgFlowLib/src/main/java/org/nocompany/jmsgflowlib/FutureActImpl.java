@@ -15,6 +15,18 @@ public final class FutureActImpl extends UntypedActor
 	private String _strEvn;
 
 	@Override
+	public void preStart() throws Exception
+	{
+		super.preStart();
+	}
+
+	@Override
+	public void postStop() throws Exception
+	{
+		super.postStop();
+	}
+
+	@Override
 	public void onReceive(Object objMsg) throws
 		Exception
 	{
