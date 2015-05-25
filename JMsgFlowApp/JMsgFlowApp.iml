@@ -12,5 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.typesafe.akka:akka-actor_2.10:2.2-M3" level="project" />
+    <orderEntry type="module" module-name="JMsgFlowLib" />
   </component>
 </module>
