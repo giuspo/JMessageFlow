@@ -12,20 +12,6 @@ public final class FutureActImpl extends UntypedActor
 
 	private FutureAct _tFutureAct;
 
-	private String _strEvn;
-
-	@Override
-	public void preStart() throws Exception
-	{
-		super.preStart();
-	}
-
-	@Override
-	public void postStop() throws Exception
-	{
-		super.postStop();
-	}
-
 	@Override
 	public void onReceive(Object objMsg) throws
 		Exception
@@ -35,13 +21,13 @@ public final class FutureActImpl extends UntypedActor
 			InitFutureActMsg tInitMsg = (InitFutureActMsg)objMsg;
 
 			_tFutureAct = tInitMsg.getFutureAct();
-			_strEvn = tInitMsg.getEvn();
 			_tSenderAct = getSender();
-			_tFutureAct.getMsgFlowSys().getBrokerSys().tell(objMsg, getSelf());
+			_tFutureAct.getMsgFlowSys().getBrokerSys().tell(new SubscriberMsg(tInitMsg.getEvn()),
+				getSelf());
 		}
 		else if(objMsg instanceof EventMsg)
 		{
-			_tSenderAct.forward(objMsg, getContext());
+			_tSenderAct.tell(objMsg, getSelf());
 		}
 	}
 }

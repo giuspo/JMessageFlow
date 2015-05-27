@@ -18,12 +18,14 @@ public class BrokerSys extends UntypedActor
 	private final Map<String, List<ActorRef>> _rgtEventSubscriberMap = new HashMap<String, List<ActorRef>>();
 
 	@Override
-	public void onReceive(Object objMsg) throws Exception
+	public void onReceive(Object objMsg) throws
+		Exception
 	{
 		if(objMsg instanceof SubscriberMsg)
 		{
 			SubscriberMsg tSubMsg = (SubscriberMsg)objMsg;
-			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tSubMsg.getEventName());
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(
+				tSubMsg.getEventName());
 
 			if(!bIsKeyFind)
 			{
@@ -33,14 +35,16 @@ public class BrokerSys extends UntypedActor
 				// SG: Create new Actor Subscribe List for this Event
 				rgtActorList.add(getSender());
 				// SG: Add new Event and Actor to Dictionary
-				_rgtEventSubscriberMap.put(tSubMsg.getEventName(), rgtActorList);
+				_rgtEventSubscriberMap.put(tSubMsg.getEventName(),
+					rgtActorList);
 				// SG: Watch this Actor
 				getContext().watch(getSender());
 			}
 			else
 			{
 				// SG: Event already exists
-				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(tSubMsg.getEventName());
+				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(
+					tSubMsg.getEventName());
 				boolean bIsActorFind = rgtActorList.contains(getSender());
 
 				if(!bIsActorFind)
@@ -55,12 +59,14 @@ public class BrokerSys extends UntypedActor
 		else if(objMsg instanceof UnSubscribeMsg)
 		{
 			UnSubscribeMsg tUnSubMsg = (UnSubscribeMsg)objMsg;
-			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tUnSubMsg.getEventName());
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(
+				tUnSubMsg.getEventName());
 
 			if(bIsKeyFind)
 			{
 				// SG: Event already exists
-				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(tUnSubMsg.getEventName());
+				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(
+					tUnSubMsg.getEventName());
 				boolean bIsActorFind = rgtActorList.remove(getSender());
 
 				if(bIsActorFind)
@@ -86,14 +92,16 @@ public class BrokerSys extends UntypedActor
 		else if(objMsg instanceof EventMsg)
 		{
 			EventMsg tEventMsg = (EventMsg)objMsg;
-			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(tEventMsg.getEvent());
+			boolean bIsKeyFind = _rgtEventSubscriberMap.containsKey(
+				tEventMsg.getEvent());
 
 			if(bIsKeyFind)
 			{
-				for(List<ActorRef> rgtActor : _rgtEventSubscriberMap.values())
-				{
-					rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg, getContext()));
-				}
+				List<ActorRef> rgtActor = _rgtEventSubscriberMap.get(
+					tEventMsg.getEvent());
+
+				rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg,
+					getContext()));
 			}
 		}
 

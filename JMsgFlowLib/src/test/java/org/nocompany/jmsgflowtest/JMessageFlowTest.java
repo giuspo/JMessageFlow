@@ -1,7 +1,9 @@
 package org.nocompany.jmsgflowtest;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.nocompany.jmsgflowlib.AMsgFlowSys;
+import org.nocompany.jmsgflowlib.EventMsg;
 import org.nocompany.jmsgflowlib.MsgFlowSys;
 import scala.concurrent.Await;
 import scala.concurrent.Awaitable;
@@ -27,15 +29,12 @@ public class JMessageFlowTest
 
 		tMsgFlowSys.Publish("Ping", new PingMsg(0));
 
-		Awaitable<Object> tRes;
+		Object objData = Await.result(tFut, Duration.apply(1000000, TimeUnit.MILLISECONDS));
 
-		for(int iCont = 0; iCont < 3; ++iCont)
-		{
-			tRes = Await.ready(tFut, Duration.apply(100, TimeUnit.MICROSECONDS));
+		Assert.assertTrue(objData instanceof EventMsg);
 
+		EventMsg tEvnMsg = (EventMsg)objData;
 
-		}
-
-
+		Assert.assertTrue(tEvnMsg.getEvent().equals("Pong"));
 	}
 }

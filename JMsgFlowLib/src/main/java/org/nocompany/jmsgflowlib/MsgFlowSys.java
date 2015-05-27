@@ -5,7 +5,9 @@ import akka.actor.ActorSystem;
 import akka.actor.Inbox;
 import akka.actor.Props;
 import akka.pattern.Patterns;
+import akka.util.Timeout;
 import scala.concurrent.Future;
+import scala.concurrent.duration.FiniteDuration;
 
 /**
  * Created by giulio on 10/05/15.
@@ -55,7 +57,8 @@ public final class MsgFlowSys extends AMsgFlowSys
 		FutureAct tFutureAct = new FutureAct(this);
 		ActorRef tActor = _tActorSys.actorOf(Props.create(FutureActImpl.class));
 
-		return Patterns.ask(tActor, new InitFutureActMsg(tFutureAct, strEvn), 1000);
+		return Patterns.ask(tActor, new InitFutureActMsg(tFutureAct, strEvn),
+			1000000);
 	}
 
 	@Override
