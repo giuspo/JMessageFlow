@@ -6,14 +6,10 @@ import org.nocompany.jmsgflowlib.AMsgFlowSys;
 import org.nocompany.jmsgflowlib.EventMsg;
 import org.nocompany.jmsgflowlib.MsgFlowSys;
 import scala.concurrent.Await;
-import scala.concurrent.Awaitable;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.Assert.*;
 
 public class JMessageFlowTest
 {
@@ -29,7 +25,7 @@ public class JMessageFlowTest
 
 		tMsgFlowSys.Publish("Ping", new PingMsg(0));
 
-		Object objData = Await.result(tFut, Duration.apply(1000000, TimeUnit.MILLISECONDS));
+		Object objData = Await.result(tFut, Duration.apply(1000, TimeUnit.MILLISECONDS));
 
 		Assert.assertTrue(objData instanceof EventMsg);
 

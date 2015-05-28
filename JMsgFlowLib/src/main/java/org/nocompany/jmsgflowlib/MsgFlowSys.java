@@ -15,6 +15,7 @@ import scala.concurrent.duration.FiniteDuration;
 public final class MsgFlowSys extends AMsgFlowSys
 {
 	private final ActorSystem _tActorSys;
+
 	private final ActorRef _tBrokerSys;
 
 	public MsgFlowSys(String strName)
@@ -58,7 +59,7 @@ public final class MsgFlowSys extends AMsgFlowSys
 		ActorRef tActor = _tActorSys.actorOf(Props.create(FutureActImpl.class));
 
 		return Patterns.ask(tActor, new InitFutureActMsg(tFutureAct, strEvn),
-			1000000);
+			1000);
 	}
 
 	@Override
