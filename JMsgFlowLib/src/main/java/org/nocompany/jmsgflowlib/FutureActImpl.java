@@ -6,7 +6,7 @@ import akka.actor.UntypedActor;
 /**
  * Created by giulio on 24/05/15.
  */
-public final class FutureActImpl extends UntypedActor
+final class FutureActImpl extends UntypedActor
 {
 	private ActorRef _tSenderAct;
 
@@ -23,11 +23,11 @@ public final class FutureActImpl extends UntypedActor
 			_tFutureAct = tInitMsg.getFutureAct();
 			_tSenderAct = getSender();
 			_tFutureAct.getMsgFlowSys().getBrokerSys().tell(new SubscriberMsg(tInitMsg.getEvn()),
-				getSelf());
+				self());
 		}
 		else if(objMsg instanceof EventMsg)
 		{
-			_tSenderAct.tell(objMsg, getSelf());
+			_tSenderAct.tell(objMsg, self());
 		}
 	}
 }

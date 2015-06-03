@@ -3,7 +3,7 @@ package org.nocompany.jmsgflowlib;
 /**
  * Created by giulio on 24/05/15.
  */
-public class FutureAct
+class FutureAct
 {
 	private AMsgFlowSys _tMsgFlowSys;
 

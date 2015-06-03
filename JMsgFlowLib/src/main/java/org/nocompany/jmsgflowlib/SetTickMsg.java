@@ -5,9 +5,9 @@ import scala.concurrent.duration.Duration;
 /**
  * Created by giulio on 13/05/15.
  */
-public class SetTickMsg
+class SetTickMsg
 {
-	final private Duration _tDuration;
+	private final Duration _tDuration;
 
 	public Duration getDuration()
 	{

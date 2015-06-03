@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by giulio on 10/05/15.
  */
-public class MsgFlowActImpl extends UntypedActor
+class MsgFlowActImpl extends UntypedActor
 {
 	private AMsgFlowAct _tMsgFLowAct;
 
@@ -20,9 +20,9 @@ public class MsgFlowActImpl extends UntypedActor
 
 	private Cancellable SetTick(Duration tDuration)
 	{
-		return getContext().system().scheduler().schedule(Duration.Zero(),
-			Duration.create(100, TimeUnit.MILLISECONDS), getSelf(), _strTick,
-			getContext().system().dispatcher(), null);
+		return context().system().scheduler().schedule(Duration.Zero(),
+			Duration.create(100, TimeUnit.MILLISECONDS), self(), _strTick,
+			context().system().dispatcher(), null);
 	}
 
 	@Override
@@ -59,6 +59,7 @@ public class MsgFlowActImpl extends UntypedActor
 			{
 				EventMsg tEventMsg = (EventMsg)objMsg;
 
+				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg);
 				_tMsgFLowAct.OnMsgFlowReceive(tEventMsg.getEvent(),
 					((Object[])(tEventMsg.getData()))[0]);
 			}

@@ -3,7 +3,7 @@ package org.nocompany.jmsgflowlib;
 /**
  * Created by giulio on 10/05/15.
  */
-public class SubscriberMsg
+class SubscriberMsg
 {
 	private final String _strEventName;
 
@@ -12,8 +12,8 @@ public class SubscriberMsg
 		return _strEventName;
 	}
 
-	public SubscriberMsg(String strEventName)
+	public SubscriberMsg(String strEvnName)
 	{
-		_strEventName = strEventName;
+		_strEventName = strEvnName;
 	}
 }

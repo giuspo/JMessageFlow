@@ -3,7 +3,7 @@ package org.nocompany.jmsgflowlib;
 /**
  * Created by giulio on 10/05/15.
  */
-public class UnSubscribeMsg
+class UnSubscribeMsg
 {
 	private final String _strEventName;
 

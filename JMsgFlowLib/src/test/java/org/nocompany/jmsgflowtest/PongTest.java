@@ -8,13 +8,13 @@ import org.nocompany.jmsgflowlib.AMsgFlowAct;
 public class PongTest extends AMsgFlowAct
 {
 	@Override
-	public void InitMsgFlow()
+	protected void InitMsgFlow()
 	{
 		Subscribe("Ping");
 	}
 
 	@Override
-	public void OnMsgFlowReceive(String strEvn, Object objData)
+	protected void OnMsgFlowReceive(String strEvn, Object objData)
 	{
 		if(strEvn.equals("Ping"))
 		{

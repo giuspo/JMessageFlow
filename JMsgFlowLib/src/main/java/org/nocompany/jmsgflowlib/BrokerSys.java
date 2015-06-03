@@ -13,9 +13,9 @@ import java.util.function.Predicate;
 /**
  * Created by giulio on 10/05/15.
  */
-public class BrokerSys extends UntypedActor
+class BrokerSys extends UntypedActor
 {
-	private final Map<String, List<ActorRef>> _rgtEventSubscriberMap = new HashMap<String, List<ActorRef>>();
+	private final Map<String, List<ActorRef>> _rgtEventSubscriberMap = new HashMap<>();
 
 	@Override
 	public void onReceive(Object objMsg) throws
@@ -30,29 +30,29 @@ public class BrokerSys extends UntypedActor
 			if(!bIsKeyFind)
 			{
 				// SG: Event doesn't exist
-				ArrayList<ActorRef> rgtActorList = new ArrayList<ActorRef>();
+				ArrayList<ActorRef> rgtActorList = new ArrayList<>();
 
 				// SG: Create new Actor Subscribe List for this Event
-				rgtActorList.add(getSender());
+				rgtActorList.add(sender());
 				// SG: Add new Event and Actor to Dictionary
 				_rgtEventSubscriberMap.put(tSubMsg.getEventName(),
 					rgtActorList);
 				// SG: Watch this Actor
-				getContext().watch(getSender());
+				context().watch(sender());
 			}
 			else
 			{
 				// SG: Event already exists
 				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(
 					tSubMsg.getEventName());
-				boolean bIsActorFind = rgtActorList.contains(getSender());
+				boolean bIsActorFind = rgtActorList.contains(sender());
 
 				if(!bIsActorFind)
 				{
 					// SG: Actor doesn't exist into Subscribe List
-					rgtActorList.add(getSender());
+					rgtActorList.add(sender());
 					// SG: Watch this Actor
-					getContext().watch(getSender());
+					context().watch(sender());
 				}
 			}
 		}
@@ -67,11 +67,11 @@ public class BrokerSys extends UntypedActor
 				// SG: Event already exists
 				List<ActorRef> rgtActorList = _rgtEventSubscriberMap.get(
 					tUnSubMsg.getEventName());
-				boolean bIsActorFind = rgtActorList.remove(getSender());
+				boolean bIsActorFind = rgtActorList.remove(sender());
 
 				if(bIsActorFind)
 				{
-					getContext().unwatch(getSender());
+					context().unwatch(getSender());
 
 					if(0 >= rgtActorList.size())
 					{
@@ -101,7 +101,7 @@ public class BrokerSys extends UntypedActor
 					tEventMsg.getEvent());
 
 				rgtActor.forEach(tActorRef -> tActorRef.forward(tEventMsg,
-					getContext()));
+					context()));
 			}
 		}
 

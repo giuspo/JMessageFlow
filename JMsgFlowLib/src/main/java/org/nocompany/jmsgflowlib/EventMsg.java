@@ -6,6 +6,7 @@ package org.nocompany.jmsgflowlib;
 public class EventMsg
 {
 	private final String _strEvent;
+
 	private final Object _objData;
 
 	public String getEvent()
@@ -20,7 +21,7 @@ public class EventMsg
 
 	public EventMsg(String strEvent, Object objData)
 	{
-		this._strEvent = strEvent;
-		this._objData = objData;
+		_strEvent = strEvent;
+		_objData = objData;
 	}
 }

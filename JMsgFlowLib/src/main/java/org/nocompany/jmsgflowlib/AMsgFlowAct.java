@@ -5,6 +5,8 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import scala.concurrent.duration.Duration;
 
+import java.util.List;
+
 /**
  * Created by giulio on 08/05/15.
  */
@@ -16,12 +18,17 @@ public abstract class AMsgFlowAct
 
 	private LoggingAdapter _tLog;
 
-	public final void setActorImpl(ActorRef tActor)
+	protected final void setActorImpl(ActorRef tActor)
 	{
 		_tActor = tActor;
 	}
 
-	public final void setMsgFlowSys(AMsgFlowSys tMsgFlowSys)
+	public AMsgFlowSys getMsgFlowSys()
+	{
+		return _tMsgFlowSys;
+	}
+
+	protected final void setMsgFlowSys(AMsgFlowSys tMsgFlowSys)
 	{
 		_tMsgFlowSys = tMsgFlowSys;
 		_tLog = Logging.getLogger(_tMsgFlowSys.getActorSystem(), this);
@@ -52,7 +59,12 @@ public abstract class AMsgFlowAct
 		_tActor.tell(new SetTickMsg(tDuration), _tActor);
 	}
 
-	public void OnTick()
+	protected void OnTick()
+	{
+
+	}
+
+	protected void OnMsgFlowReceive(EventMsg tEvn)
 	{
 
 	}

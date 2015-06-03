@@ -5,9 +5,11 @@ import akka.actor.ActorSystem;
 import akka.actor.Inbox;
 import akka.actor.Props;
 import akka.pattern.Patterns;
-import akka.util.Timeout;
+import akka.pattern.PromiseActorRef;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
+
+import java.util.List;
 
 /**
  * Created by giulio on 10/05/15.
@@ -18,20 +20,14 @@ public final class MsgFlowSys extends AMsgFlowSys
 
 	private final ActorRef _tBrokerSys;
 
-	public MsgFlowSys(String strName)
-	{
-		_tActorSys = ActorSystem.create(strName);
-		_tBrokerSys = _tActorSys.actorOf(Props.create(BrokerSys.class), "BrokerSys");
-	}
-
 	@Override
-	public ActorRef getBrokerSys()
+	protected ActorRef getBrokerSys()
 	{
 		return _tBrokerSys;
 	}
 
 	@Override
-	public ActorSystem getActorSystem()
+	protected ActorSystem getActorSystem()
 	{
 		return _tActorSys;
 	}
@@ -63,6 +59,32 @@ public final class MsgFlowSys extends AMsgFlowSys
 	}
 
 	@Override
+	public ActorRef Subscribe2(String strEvn)
+	{
+		TmpSubscriberAct tSub = new TmpSubscriberAct();
+		ActorRef tActor = _tActorSys.actorOf(Props.create(
+			TmpSubscriberActImpl.class));
+
+		tSub.setActorImpl(tActor);
+		tSub.setMsgFlowSys(this);
+
+		Inbox tInbox = Inbox.create(_tActorSys);
+
+		tInbox.send(tActor, new InitTmpSubscriberMsg(tSub, strEvn));
+
+		return tActor;
+	}
+
+	@Override
+	public List<EventMsg> GetEvn(ActorRef tSubActor, FiniteDuration tDuration)
+	{
+		Inbox tInbox = Inbox.create(_tActorSys);
+
+		tInbox.send(tSubActor, new GetAllEvnMsg());
+		return (List<EventMsg>)tInbox.receive(tDuration);
+	}
+
+	@Override
 	public void LinkMsgFlowAct(AMsgFlowAct tMsgFlowAct)
 	{
 		ActorRef tActor = _tActorSys.actorOf(Props.create(MsgFlowActImpl.class));
@@ -73,5 +95,11 @@ public final class MsgFlowSys extends AMsgFlowSys
 		Inbox tInbox = Inbox.create(_tActorSys);
 
 		tInbox.send(tActor, new InitMsgFlowActMsg(tMsgFlowAct));
+	}
+
+	public MsgFlowSys(String strName)
+	{
+		_tActorSys = ActorSystem.create(strName);
+		_tBrokerSys = _tActorSys.actorOf(Props.create(BrokerSys.class), "BrokerSys");
 	}
 }

@@ -6,7 +6,7 @@ import scala.util.parsing.combinator.testing.Str;
 /**
  * Created by giulio on 24/05/15.
  */
-public class InitFutureActMsg
+class InitFutureActMsg
 {
 	private final FutureAct _tFutureAct;
 
