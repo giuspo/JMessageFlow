@@ -59,7 +59,7 @@ public final class MsgFlowSys extends AMsgFlowSys
 	}
 
 	@Override
-	public ActorRef Subscribe2(String strEvn)
+	public ActorRef Subscribe2(String strEvn, FiniteDuration tDuration)
 	{
 		TmpSubscriberAct tSub = new TmpSubscriberAct();
 		ActorRef tActor = _tActorSys.actorOf(Props.create(
@@ -71,6 +71,7 @@ public final class MsgFlowSys extends AMsgFlowSys
 		Inbox tInbox = Inbox.create(_tActorSys);
 
 		tInbox.send(tActor, new InitTmpSubscriberMsg(tSub, strEvn));
+		Object tObj = tInbox.receive(tDuration);
 
 		return tActor;
 	}

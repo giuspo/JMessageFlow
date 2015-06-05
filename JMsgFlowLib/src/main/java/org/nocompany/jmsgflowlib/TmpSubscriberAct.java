@@ -3,7 +3,7 @@ package org.nocompany.jmsgflowlib;
 /**
  * Created by giulio on 02/06/15.
  */
-public class TmpSubscriberAct extends AMsgFlowAct
+class TmpSubscriberAct extends AMsgFlowAct
 {
 	@Override
 	protected void InitMsgFlow()

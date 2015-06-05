@@ -28,6 +28,7 @@ class TmpSubscriberActImpl extends UntypedActor
 			tInitMsg.getMsgFlowAct().getMsgFlowSys().getBrokerSys().tell(
 				new SubscriberMsg(tInitMsg.getEvn()), self());
 			_bInitOk = true;
+			sender().tell(new OkTmpSubscribe(), self());
 		}
 		else if(_bInitOk)
 		{

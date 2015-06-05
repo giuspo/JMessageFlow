@@ -41,30 +41,32 @@ public class JMessageFlowTest
 	public void testPublish2() throws
 		Exception
 	{
+		int iTimeout = 10000;
 		AMsgFlowSys tMsgFlowSys = new MsgFlowSys("MsgFlowSys");
 
 		tMsgFlowSys.LinkMsgFlowAct(new PongTest());
 
-		ActorRef tSubActor = tMsgFlowSys.Subscribe2("Pong");
+		ActorRef tSubActor = tMsgFlowSys.Subscribe2("Pong", FiniteDuration.create
+			(iTimeout, TimeUnit.MILLISECONDS));
 
 		tMsgFlowSys.Publish("Ping", new PingMsg(0));
 
 		List<EventMsg> rgtEvn;
+		long lMilli = System.currentTimeMillis();
+
 		for(;;)
 		{
-			long lMilli = System.currentTimeMillis();
-
 			rgtEvn = tMsgFlowSys.GetEvn(tSubActor, FiniteDuration.create
-				(1000, TimeUnit.MILLISECONDS));
+				(iTimeout, TimeUnit.MILLISECONDS));
 
 			if(!rgtEvn.isEmpty())
 			{
 				break;
 			}
 
-			if()
+			if((System.currentTimeMillis() - lMilli) > (iTimeout * 2))
 			{
-
+				break;
 			}
 
 			Thread.sleep(1);
